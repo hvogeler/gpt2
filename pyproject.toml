@@ -41,6 +41,7 @@ select = [
     "TCH",   # flake8-type-checking
     "RUF",   # ruff-specific rules
     "PT",    # pytest
+    "ANN",   # flake8-annotations (require explicit type annotations)
 ]
 ignore = [
     "E501",  # line length handled by formatter
