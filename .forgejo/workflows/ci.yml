@@ -8,7 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: docker
+    runs-on: docker-python
     container:
       image: ghcr.io/astral-sh/uv:python3.14-bookworm
 

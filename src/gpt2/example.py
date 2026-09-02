@@ -1,6 +1,6 @@
 """A few example methods to get CI/CD setup"""
 
-def echo(msg: str):
+def echo(msg: str) -> str:
     """Echo a message to the console"""
     return msg
 
