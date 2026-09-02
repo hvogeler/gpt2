@@ -1,5 +1,7 @@
 # gpt2
 
+[![CI](https://git.home.vogeler.cc/hvo/gpt2/badges/workflows/ci.yml/badge.svg?branch=main)](https://git.home.vogeler.cc/hvo/gpt2/actions?workflow=ci.yml)
+
 Working through Andrej Karpathy's [Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) as a typed Python application — no notebooks.
 
 ## Lectures
