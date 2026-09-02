@@ -40,3 +40,6 @@ jobs:
 
       - name: Run tests
         run: uv run pytest tests/ -v --cov=src/gpt2 --cov-report=term-missing
+
+      - name: Prune uv cache before saving
+        run: uv cache prune --ci

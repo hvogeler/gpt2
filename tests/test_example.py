@@ -33,7 +33,7 @@ def test_check_prime_with_non_prime_number() -> None:
     assert check_prime(100) is False
 
 
-def test_check_prime_with_edge_cases():
+def test_check_prime_with_edge_cases() -> None:
     """Test that check_prime returns False for edge cases"""
     from gpt2.example import check_prime
 
