@@ -13,6 +13,9 @@ jobs:
       image: ghcr.io/astral-sh/uv:python3.14-bookworm
 
     steps:
+      - name: Install Node.js (required for JS-based actions)
+        run: apt-get update && apt-get install -y --no-install-recommends nodejs
+
       - uses: actions/checkout@v4
 
       - name: Install dependencies
