@@ -24,3 +24,19 @@ def test_check_prime_with_prime_number() -> None:
     from gpt2.example import check_prime
 
     assert check_prime(223) is True
+
+
+def test_check_prime_with_non_prime_number() -> None:
+    """Test that check_prime returns False for a non-prime number"""
+    from gpt2.example import check_prime
+
+    assert check_prime(100) is False
+
+
+def test_check_prime_with_edge_cases():
+    """Test that check_prime returns False for edge cases"""
+    from gpt2.example import check_prime
+
+    assert check_prime(1) is False
+    assert check_prime(0) is False
+    assert check_prime(-5) is False
