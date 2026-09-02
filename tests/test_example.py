@@ -17,3 +17,10 @@ def test_echo_empty_string() -> None:
 def test_echo_preserves_whitespace_and_unicode() -> None:
     msg = "  héllo wörld  \n"
     assert echo(msg) == msg
+
+
+def test_check_prime_with_prime_number() -> None:
+    """Test that check_prime returns True for a prime number"""
+    from gpt2.example import check_prime
+
+    assert check_prime(223) is True
