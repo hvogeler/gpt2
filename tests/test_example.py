@@ -40,3 +40,4 @@ def test_check_prime_with_edge_cases() -> None:
     assert check_prime(1) is False
     assert check_prime(0) is False
     assert check_prime(-5) is False
+    assert check_prime(-6) is False
