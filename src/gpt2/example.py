@@ -1,9 +1,9 @@
 """A few example methods to get CI/CD setup"""
 
 
-def echo(msg1: str) -> str:
+def echo(msg: str) -> str:
     """Echo a message to the console"""
-    return msg1
+    return msg
 
 
 def check_prime(num: int) -> bool:
