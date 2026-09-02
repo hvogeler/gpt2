@@ -1,4 +1,4 @@
-"""A few example methods to get CI/CD setup"""
+"""A few example methods to get CI/CD setup and running"""
 
 
 def echo(msg: str) -> str:
