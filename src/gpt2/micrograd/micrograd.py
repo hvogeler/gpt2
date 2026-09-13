@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import logging
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
-from graphviz import Digraph
+if TYPE_CHECKING:
+    from graphviz import Digraph  # type: ignore[import-untyped]
 
 logger = logging.getLogger(__name__)
 
