@@ -12,10 +12,13 @@ logger = logging.getLogger(__name__)
 class Value:
     """A simple class to represent a value in a computational graph."""
 
-    def __init__(self, data: float, _children: tuple[Value, ...] = (), _op: str = "") -> None:
+    def __init__(
+        self, data: float, _children: tuple[Value, ...] = (), _op: str = "", label: str = ""
+    ) -> None:
         self.data = data
         self._prev = set(_children)
         self._op = _op  # the operation that produced this node, for graphviz / debugging / etc
+        self.label = label  # optional label for graphviz / debugging / etc
 
     @property
     def prev(self) -> set[Value]:
@@ -68,7 +71,7 @@ def draw_dot(root: Value) -> Digraph:
 
     for n in nodes:
         uid = str(id(n))
-        dot.node(name=uid, label=f"{n.data:.4f}", shape="record")
+        dot.node(name=uid, label=f"{n.label} | {n.data:.4f}", shape="record")
         if n.op:
             dot.node(name=uid + n.op, label=n.op)
             dot.edge(uid + n.op, uid)
