@@ -9,6 +9,8 @@ description = "Neural Networks: Zero to Hero — reimplementation with strict ty
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
+    "graphviz>=0.21",
+    "numpy>=2.5.3",
     "pydantic>=2.0",
     "torch>=2.0",
 ]
