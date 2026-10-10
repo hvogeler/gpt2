@@ -1,9 +1,12 @@
 from __future__ import annotations
 
 import logging
+import math
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from graphviz import Digraph  # type: ignore[import-untyped]
 
 logger = logging.getLogger(__name__)
@@ -13,12 +16,20 @@ class Value:
     """A simple class to represent a value in a computational graph."""
 
     def __init__(
-        self, data: float, _children: tuple[Value, ...] = (), _op: str = "", label: str = ""
+        self,
+        data: float,
+        _children: tuple[Value, ...] = (),
+        _op: str = "",
+        label: str = "",
     ) -> None:
         self.data = data
+        self.grad = 0.0  # the gradient of this value
         self._prev = set(_children)
         self._op = _op  # the operation that produced this node, for graphviz / debugging / etc
         self.label = label  # optional label for graphviz / debugging / etc
+        self._backward: Callable[[], None] = lambda: (
+            None
+        )  # function to compute the gradient of this value
 
     @property
     def prev(self) -> set[Value]:
@@ -36,12 +47,41 @@ class Value:
     def __add__(self, other: Value) -> Value:
         """Add two Value instances."""
 
-        return Value(self.data + other.data, _children=(self, other), _op="+")
+        out = Value(self.data + other.data, _children=(self, other), _op="+")
+
+        def _backward() -> None:
+            self.grad += 1.0 * out.grad
+            other.grad += 1.0 * out.grad
+
+        out._backward = _backward
+
+        return out
 
     def __mul__(self, other: Value) -> Value:
         """Multiply two Value instances."""
+        out = Value(self.data * other.data, _children=(self, other), _op="*")
 
-        return Value(self.data * other.data, _children=(self, other), _op="*")
+        def _backward() -> None:
+            self.grad += other.data * out.grad
+            other.grad += self.data * out.grad
+
+        out._backward = _backward
+
+        return out
+
+    def tanh(self) -> Value:
+        """Apply the tanh activation function to this Value instance."""
+        x = self.data
+        t = (math.exp(2 * x) - 1) / (math.exp(2 * x) + 1)  # tanh formula
+
+        out = Value(t, _children=(self,), _op="tanh")
+
+        def _backward() -> None:
+            self.grad = (1 - t**2) * out.grad
+
+        out._backward = _backward
+
+        return out
 
 
 def trace(root: Value) -> tuple[set[Value], set[tuple[Value, Value]]]:
@@ -71,7 +111,7 @@ def draw_dot(root: Value) -> Digraph:
 
     for n in nodes:
         uid = str(id(n))
-        dot.node(name=uid, label=f"{n.label} | {n.data:.4f}", shape="record")
+        dot.node(name=uid, label=f"{n.label} | v: {n.data:.4f} | g: {n.grad:.4f}", shape="record")
         if n.op:
             dot.node(name=uid + n.op, label=n.op)
             dot.edge(uid + n.op, uid)
