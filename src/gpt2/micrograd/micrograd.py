@@ -27,7 +27,7 @@ class Value:
         self._prev = set(_children)
         self._op = _op  # the operation that produced this node, for graphviz / debugging / etc
         self.label = label  # optional label for graphviz / debugging / etc
-        self.backward: Callable[[], None] = lambda: (
+        self._backward: Callable[[], None] = lambda: (
             None
         )  # function to compute the gradient of this value
 
@@ -42,7 +42,7 @@ class Value:
         return self._op
 
     def __repr__(self) -> str:
-        return f"Value(data={self.data})"
+        return f"Value(data={self.data}, label={self.label}, grad={self.grad})"
 
     def __add__(self, other: Value) -> Value:
         """Add two Value instances."""
@@ -53,7 +53,7 @@ class Value:
             self.grad += 1.0 * out.grad
             other.grad += 1.0 * out.grad
 
-        out.backward = _backward
+        out._backward = _backward
 
         return out
 
@@ -65,7 +65,7 @@ class Value:
             self.grad += other.data * out.grad
             other.grad += self.data * out.grad
 
-        out.backward = _backward
+        out._backward = _backward
 
         return out
 
@@ -79,9 +79,29 @@ class Value:
         def _backward() -> None:
             self.grad = (1 - t**2) * out.grad
 
-        out.backward = _backward
+        out._backward = _backward
 
         return out
+
+    def backward(self) -> None:
+        """Perform backpropagation to compute gradients for all nodes in the computation graph."""
+
+        ordered_nodes: list[Value] = []
+        visited: set[Value] = set()
+
+        def sort_nodes(v: Value) -> None:
+            """Build a topological ordering of the computation graph."""
+            if v not in visited:
+                visited.add(v)
+                for child in v.prev:
+                    sort_nodes(child)
+                ordered_nodes.append(v)
+
+        sort_nodes(self)
+        ordered_nodes.reverse()
+
+        for n in ordered_nodes:
+            n._backward()
 
 
 def trace(root: Value) -> tuple[set[Value], set[tuple[Value, Value]]]:
