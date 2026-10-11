@@ -27,7 +27,7 @@ class Value:
         self._prev = set(_children)
         self._op = _op  # the operation that produced this node, for graphviz / debugging / etc
         self.label = label  # optional label for graphviz / debugging / etc
-        self._backward: Callable[[], None] = lambda: (
+        self.backward: Callable[[], None] = lambda: (
             None
         )  # function to compute the gradient of this value
 
@@ -53,7 +53,7 @@ class Value:
             self.grad += 1.0 * out.grad
             other.grad += 1.0 * out.grad
 
-        out._backward = _backward
+        out.backward = _backward
 
         return out
 
@@ -65,7 +65,7 @@ class Value:
             self.grad += other.data * out.grad
             other.grad += self.data * out.grad
 
-        out._backward = _backward
+        out.backward = _backward
 
         return out
 
@@ -79,7 +79,7 @@ class Value:
         def _backward() -> None:
             self.grad = (1 - t**2) * out.grad
 
-        out._backward = _backward
+        out.backward = _backward
 
         return out
 
