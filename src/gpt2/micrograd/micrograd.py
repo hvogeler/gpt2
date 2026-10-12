@@ -121,7 +121,7 @@ def trace(root: Value) -> tuple[set[Value], set[tuple[Value, Value]]]:
     return nodes, edges
 
 
-def draw_dot(root: Value) -> Digraph:
+def draw_dot(root: Value) -> Digraph:  # pragma: no cover
     """Draw the computational graph using Graphviz."""
     from graphviz import Digraph  # type: ignore[import-untyped]
 

@@ -31,5 +31,6 @@ uv sync --dev
 uv run ruff check .
 uv run ruff format .
 uv run ty check src/gpt2
-uv run pytest tests/ -v
+uv run pre-commit run -all-files
+uv run pytest tests/ -v --cov=src/gpt2 --cov-report=term-missing
 ```
